@@ -41,16 +41,15 @@ public class MainFragment extends Fragment {
     public Button startButton;
 
 
-
-    public static MainFragment newInstance(){
+    public static MainFragment newInstance() {
         return new MainFragment();
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view=inflater.inflate(R.layout.fragment_main,container,false);
-        ButterKnife.bind(this,view);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, view);
 
         ApiClient.createService(getContext()).getLeague().enqueue(new Callback<Leagues>() {
             @Override
@@ -65,13 +64,10 @@ public class MainFragment extends Fragment {
             @Override
             public void onFailure(Call<Leagues> call, Throwable t) {
 
-                Toast.makeText(getContext(),"FAİL",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "FAİL", Toast.LENGTH_LONG).show();
 
             }
         });
-
-
-
 
 
         return view;
@@ -80,13 +76,12 @@ public class MainFragment extends Fragment {
 
 
     @OnClick(R.id.startLeague)
-    public void setStartButton(){
+    public void setStartButton() {
 
-        Intent intent =new Intent(getActivity(),MatchActivity.class);
+        Intent intent = new Intent(getActivity(), MatchActivity.class);
         startActivity(intent);
 
     }
-
 
 
 }

@@ -22,18 +22,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
 
-    private  static final String BASE_URL="http://zmdp.cloud/";
+    private static final String BASE_URL = "http://zmdp.cloud/";
 
-    private static Retrofit retrofit=null;
+    private static Retrofit retrofit = null;
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
     private static Gson gson = new GsonBuilder().create();
     private static GsonConverterFactory converterFactory = GsonConverterFactory.create(gson);
 
 
-
-
-    private static Retrofit.Builder builder=
+    private static Retrofit.Builder builder =
             new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(converterFactory);
@@ -44,35 +42,35 @@ public class ApiClient {
         httpClient.interceptors().clear();
 
 
-            httpClient.addInterceptor(new Interceptor() {
-                @Override
-                public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Interceptor.Chain chain) throws IOException {
 
-                    Request original = chain.request();
+                Request original = chain.request();
 
-                    Request.Builder requestBuilder = original.newBuilder()
-                            .header("Authentication","Barear" )
-                            .method(original.method(), original.body());
-                    Request request = requestBuilder.build();
-                    okhttp3.Response response = chain.proceed(request);
-
-
-                    return response;
-                }
+                Request.Builder requestBuilder = original.newBuilder()
+                        .header("Authentication", "Barear")
+                        .method(original.method(), original.body());
+                Request request = requestBuilder.build();
+                okhttp3.Response response = chain.proceed(request);
 
 
-            });
+                return response;
+            }
+
+
+        });
 
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
 
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client=httpClient.writeTimeout(1, TimeUnit.MINUTES)
-                .readTimeout(1,TimeUnit.MINUTES)
-                .connectTimeout(1,TimeUnit.MINUTES)
+        OkHttpClient client = httpClient.writeTimeout(1, TimeUnit.MINUTES)
+                .readTimeout(1, TimeUnit.MINUTES)
+                .connectTimeout(1, TimeUnit.MINUTES)
                 .addInterceptor(loggingInterceptor)
                 .build();
-        Retrofit retrofit =builder
+        Retrofit retrofit = builder
                 .client(client)
                 .build();
 

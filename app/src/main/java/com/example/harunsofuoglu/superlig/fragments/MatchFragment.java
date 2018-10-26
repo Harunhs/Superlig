@@ -35,7 +35,6 @@ import retrofit2.Response;
 public class MatchFragment extends Fragment {
 
 
-
     @BindView(R.id.matchOne)
     public TextView matchOne;
     @BindView(R.id.matchTwo)
@@ -54,64 +53,82 @@ public class MatchFragment extends Fragment {
     public Button playMatches;
 
 
+    public ArrayList<LeagueTable> arrayList;
+    public ArrayList<String> matches ;
+    public ArrayList<String> secondMatches;
+    public ArrayList<String> scoresFirst;
 
-    public static ArrayList<LeagueTable> arrayList;
 
 
-    public static MatchFragment newInstance(){
+    public static MatchFragment newInstance() {
         return new MatchFragment();
 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view=inflater.inflate(R.layout.fragment_match,container,false);
-        ButterKnife.bind(this,view);
-        return view;
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_match, container, false);
+        ButterKnife.bind(this, view);
 
-
-
-    @OnClick(R.id.playMatches)
-    public void play(){
+        arrayList = new ArrayList<>();
 
         ApiClient.createService(getContext()).getLeague().enqueue(new Callback<Leagues>() {
             @Override
             public void onResponse(Call<Leagues> call, Response<Leagues> response) {
                 int teamSize = response.body().getLeagueStage().get(0).getLeagueTable().size();
-                arrayList = new ArrayList<>();
 
-                for(int i = 0 ;i<teamSize;i++){
+
+                for (int i = 0; i < teamSize; i++) {
                     arrayList.add(response.body().getLeagueStage().get(0).getLeagueTable().get(i));
 
                 }
 
-                generateFixture(arrayList.size(),arrayList);
 
             }
 
             @Override
             public void onFailure(Call<Leagues> call, Throwable t) {
 
-                Toast.makeText(getContext(),"Fail",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Fail", Toast.LENGTH_LONG).show();
             }
         });
+
+        return view;
+    }
+
+
+    @OnClick(R.id.playMatches)
+    public void play() {
+        generateFixture(arrayList.size(),arrayList);
+
+        matchOne.setText(matches.get(0));
+        matchTwo.setText(matches.get(1));
+        matchThree.setText(matches.get(2));
+
+        resultOne.setText(scoresFirst.get(0));
+        resultTwo.setText(scoresFirst.get(1));
+        resultThree.setText(scoresFirst.get(2));
 
     }
 
 
-    private  void generateFixture(int teamSize,ArrayList<LeagueTable> teamList){
 
-        ArrayList<String> matches = new ArrayList<>();
-        ArrayList<String> secondMatches = new ArrayList<>();
+
+    private void generateFixture(int teamSize, ArrayList<LeagueTable> teamList) {
+
+        matches = new ArrayList<>();
+        secondMatches = new ArrayList<>();
+        scoresFirst = new ArrayList<>();
+
+
 
 
         // Kaç round sonrası lig tamamlanacak
-        int roundCount=teamSize-1;
+        int roundCount = teamSize - 1;
         // Bir round'da ne kadar maç oynanır
-        int matchCountPerRound=teamSize/2;
+        int matchCountPerRound = teamSize / 2;
 
-        List<LeagueTable> list=new ArrayList<>();
+        List<LeagueTable> list = new ArrayList<>();
 
         // Takim listesini oluşturuyoruz.
         //0. takımdan (teamSize-1). takima kadar.
@@ -122,75 +139,74 @@ public class MatchFragment extends Fragment {
         }
 
 
-            for (int i = 0; i < roundCount; i++) {
+        for (int i = 0; i < roundCount; i++) {
 
 
-                for (int j = 0; j < matchCountPerRound; j++) {
+            for (int j = 0; j < matchCountPerRound; j++) {
 
 
-                    int secondIndex = (teamSize - 1) - j;
-
-                    String match = list.get(j).getName()
-                            + "-" + list.get(secondIndex).getName();
-
-                    String matchDep = list.get(secondIndex).getName() + " - " + list.get(j).getName();
+                int secondIndex = (teamSize - 1) - j;
 
 
-                    matches.add(match);
-                    secondMatches.add(matchDep);
-
-                }
-
-                // İlk eleman sabit olacak şekilde elamanları kaydırıyoruz
-                List<LeagueTable> newList = new ArrayList<>();
-
-                // İlk eleman sabit
-                newList.add(list.get(0));
-
-                // Son eleman ikinci eleman yapıyoruz.
-                newList.add(list.get(list.size() - 1));
-
-                for (int k = 1; k < list.size() - 1; k++) {
-                    newList.add(list.get(k));
-                }
-
-                // Keydırılan liste yeni liste oluyor.
-                list = newList;
-
-            }
-
-            matchOne.setText(matches.get(0));
-            matchTwo.setText(secondMatches.get(0));
-            matchThree.setText(matches.get(5));
+                String match = list.get(j).getName()
+                        + "-" + list.get(secondIndex).getName();
 
 
+                String matchDep = list.get(secondIndex).getName() + " - " + list.get(j).getName();
 
+                score(list,scoresFirst,j,secondIndex);
 
-
-
-        }
-
-
-
-
-        public static void winOrLoose(LeagueStage leagueStage, int first, int second){
-
-
-            int winScore = (int)(Math.random()*(4-1)+1) ;
-            int looseScore = (int)(Math.random() +1);
-            String score = String.valueOf(winScore) + " - " + String.valueOf(looseScore);
-
-            if (leagueStage.getLeagueTable().get(first).getOverall()>leagueStage.getLeagueTable().get(second).getOverall()){
-
-
+                matches.add(match);
+                secondMatches.add(matchDep);
 
 
             }
 
+            // İlk eleman sabit olacak şekilde elamanları kaydırıyoruz
+            List<LeagueTable> newList = new ArrayList<>();
 
+            // İlk eleman sabit
+            newList.add(list.get(0));
+
+            // Son eleman ikinci eleman yapıyoruz.
+            newList.add(list.get(list.size() - 1));
+
+            for (int k = 1; k < list.size() - 1; k++) {
+                newList.add(list.get(k));
+            }
+
+            // Keydırılan liste yeni liste oluyor.
+            list = newList;
 
         }
+
+        /*
+         BURAYI HALLETMEM LAZIM BUTONLA BIRLIKTE CALISACAKLAR
+         */
 
 
     }
+
+    public static void score(List<LeagueTable> leagueTable,ArrayList<String> scores,int i ,int j){
+        int homeScore;
+        int depScore;
+
+
+        Random random = new Random();
+        if(leagueTable.get(i).getOverall()>leagueTable.get(j).getOverall()){
+            homeScore = random.nextInt(4);
+            depScore = random.nextInt(2);
+        }else {
+            homeScore = random.nextInt(2);
+            depScore = random.nextInt(4);
+        }
+
+        scores.add(String.valueOf(homeScore) + " - " + String.valueOf(depScore));
+    }
+
+
+
+
+
+}
 

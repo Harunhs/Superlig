@@ -20,5 +20,5 @@ public class Leagues {
 
     @SerializedName("leagueStage")
     @Expose
-    private List<LeagueStage> leagueStage ;
+    private List<LeagueStage> leagueStage;
 }

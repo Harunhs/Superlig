@@ -37,5 +37,4 @@ public class LeagueStage {
     private List<LeagueTable> leagueTable = null;
 
 
-
 }

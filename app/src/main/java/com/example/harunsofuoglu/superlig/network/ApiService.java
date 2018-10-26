@@ -18,6 +18,4 @@ public interface ApiService {
     Call<Leagues> getLeague();
 
 
-
-
 }
