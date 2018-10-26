@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/layoutOne"
+        >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:id="@+id/matchOne"
+
+                />
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:id="@+id/matchTwo"/>
+
+            <TextView
+                android:layout_width="250dp"
+                android:layout_height="40dp"
+                android:id="@+id/matchThree"
+                />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+
+            >
+            <TextView
+
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:id="@+id/resultOne"/>
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:id="@+id/resultTwo"
+                />
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:id="@+id/resultThree"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/layoutOne"
+        android:id="@+id/playMatches"
+        android:text="Play Matches"
+        />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/layoutOne"
+        android:layout_marginLeft="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_toEndOf="@+id/playMatches"
+        android:layout_toRightOf="@+id/playMatches"
+        android:text="Play Next Week"
+        />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/recyclerView"
+        android:layout_below="@+id/playMatches"
+        android:layout_marginTop="15dp">
+
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>
