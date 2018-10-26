@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.harunsofuoglu.superlig.R;
+import com.example.harunsofuoglu.superlig.data.LeagueStage;
 import com.example.harunsofuoglu.superlig.data.LeagueTable;
 import com.example.harunsofuoglu.superlig.data.Leagues;
 import com.example.harunsofuoglu.superlig.data.Team;
@@ -44,6 +45,10 @@ public class MatchFragment extends Fragment {
 
     @BindView(R.id.resultOne)
     public TextView resultOne;
+    @BindView(R.id.resultTwo)
+    public TextView resultTwo;
+    @BindView(R.id.resultThree)
+    public TextView resultThree;
 
     @BindView(R.id.playMatches)
     public Button playMatches;
@@ -88,7 +93,7 @@ public class MatchFragment extends Fragment {
             @Override
             public void onFailure(Call<Leagues> call, Throwable t) {
 
-                Toast.makeText(getContext(),"ASDADASDf",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Fail",Toast.LENGTH_LONG).show();
             }
         });
 
@@ -96,6 +101,9 @@ public class MatchFragment extends Fragment {
 
 
     private  void generateFixture(int teamSize,ArrayList<LeagueTable> teamList){
+
+        ArrayList<String> matches = new ArrayList<>();
+        ArrayList<String> secondMatches = new ArrayList<>();
 
 
         // Kaç round sonrası lig tamamlanacak
@@ -114,59 +122,67 @@ public class MatchFragment extends Fragment {
         }
 
 
-        for (int i = 0;i<roundCount;i++) {
-
-            for (int j = 0; j < matchCountPerRound; j++) {
-
-                int firstIndex = j;
-                int secondIndex = (teamSize - 1) - j;
-
-                String match = list.get(firstIndex).getName()
-                        + "-" + list.get(secondIndex).getName();
-
-                if (j == 0) {
-                    matchOne.setText(match);
+            for (int i = 0; i < roundCount; i++) {
 
 
-                } else if (j == 1) {
-                    matchTwo.setText(match);
+                for (int j = 0; j < matchCountPerRound; j++) {
 
-                } else
-                    matchThree.setText(match);
+
+                    int secondIndex = (teamSize - 1) - j;
+
+                    String match = list.get(j).getName()
+                            + "-" + list.get(secondIndex).getName();
+
+                    String matchDep = list.get(secondIndex).getName() + " - " + list.get(j).getName();
+
+
+                    matches.add(match);
+                    secondMatches.add(matchDep);
+
+                }
+
+                // İlk eleman sabit olacak şekilde elamanları kaydırıyoruz
+                List<LeagueTable> newList = new ArrayList<>();
+
+                // İlk eleman sabit
+                newList.add(list.get(0));
+
+                // Son eleman ikinci eleman yapıyoruz.
+                newList.add(list.get(list.size() - 1));
+
+                for (int k = 1; k < list.size() - 1; k++) {
+                    newList.add(list.get(k));
+                }
+
+                // Keydırılan liste yeni liste oluyor.
+                list = newList;
 
             }
 
-            // İlk eleman sabit olacak şekilde elamanları kaydırıyoruz
-            List<LeagueTable> newList = new ArrayList<>();
+            matchOne.setText(matches.get(0));
+            matchTwo.setText(secondMatches.get(0));
+            matchThree.setText(matches.get(5));
 
-            // İlk eleman sabit
-            newList.add(list.get(0));
 
-            // Son eleman ikinci eleman yapıyoruz.
-            newList.add(list.get(list.size() - 1));
 
-            for (int k = 1; k < list.size() - 1; k++) {
-                newList.add(list.get(k));
-            }
 
-            // Keydırılan liste yeni liste oluyor.
-            list = newList;
+
+
         }
-    }
 
 
-        public static void winOrLoose(Team teamOne,Team teamTwo){
+
+
+        public static void winOrLoose(LeagueStage leagueStage, int first, int second){
 
 
             int winScore = (int)(Math.random()*(4-1)+1) ;
             int looseScore = (int)(Math.random() +1);
             String score = String.valueOf(winScore) + " - " + String.valueOf(looseScore);
 
-            if (teamOne.getOverall()>teamTwo.getOverall()){
+            if (leagueStage.getLeagueTable().get(first).getOverall()>leagueStage.getLeagueTable().get(second).getOverall()){
 
-                teamOne.setPoint(3);
-                teamOne.setWin(1);
-                teamOne.setPlayedMatches(1);
+
 
 
             }

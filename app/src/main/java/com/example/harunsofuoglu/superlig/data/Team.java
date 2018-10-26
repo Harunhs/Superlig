@@ -13,16 +13,14 @@ import lombok.Setter;
 public class Team {
 
     String name;
-    int overall;
     int point;
     int win;
     int loose;
     int draw;
     int playedMatches;
 
-    public Team(String name, int overall, int point, int win, int loose, int draw, int playedMatches) {
+    public Team(String name, int point, int win, int loose, int draw, int playedMatches) {
         this.name = name;
-        this.overall = overall;
         this.point = point;
         this.win = win;
         this.loose = loose;
