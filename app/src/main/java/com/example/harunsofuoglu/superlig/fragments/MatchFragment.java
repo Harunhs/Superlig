@@ -51,6 +51,8 @@ public class MatchFragment extends Fragment {
 
     @BindView(R.id.playMatches)
     public Button playMatches;
+    @BindView(R.id.playNext)
+    public Button playNext;
 
 
     public ArrayList<LeagueTable> arrayList;
@@ -93,26 +95,30 @@ public class MatchFragment extends Fragment {
             }
         });
 
+
+
         return view;
     }
 
 
     @OnClick(R.id.playMatches)
     public void play() {
-        generateFixture(arrayList.size(),arrayList);
 
-        matchOne.setText(matches.get(0));
-        matchTwo.setText(matches.get(1));
-        matchThree.setText(matches.get(2));
+        generateFixture(arrayList.size(), arrayList);
 
-        resultOne.setText(scoresFirst.get(0));
-        resultTwo.setText(scoresFirst.get(1));
-        resultThree.setText(scoresFirst.get(2));
+        for (int i = 0; i < matches.size() - 2; i++) {
 
+
+                matchOne.setText(matches.get(i));
+                matchTwo.setText(matches.get(i + 1));
+                matchThree.setText(matches.get(i + 2));
+
+                resultOne.setText(scoresFirst.get(i));
+                resultTwo.setText(scoresFirst.get(i + 1));
+                resultThree.setText(scoresFirst.get(i + 2));
+
+        }
     }
-
-
-
 
     private void generateFixture(int teamSize, ArrayList<LeagueTable> teamList) {
 

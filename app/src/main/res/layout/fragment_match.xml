@@ -84,6 +84,7 @@
         android:layout_marginStart="50dp"
         android:layout_toEndOf="@+id/playMatches"
         android:layout_toRightOf="@+id/playMatches"
+        android:id="@+id/playNext"
         android:text="Play Next Week"
         />
 
