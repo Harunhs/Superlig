@@ -3,6 +3,8 @@ package com.example.harunsofuoglu.superlig.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.harunsofuoglu.superlig.R;
+import com.example.harunsofuoglu.superlig.adapters.ScoreTableAdapter;
 import com.example.harunsofuoglu.superlig.data.LeagueStage;
 import com.example.harunsofuoglu.superlig.data.LeagueTable;
 import com.example.harunsofuoglu.superlig.data.Leagues;
@@ -54,11 +57,18 @@ public class MatchFragment extends Fragment {
     @BindView(R.id.playNext)
     public Button playNext;
 
+    @BindView(R.id.recyclerView)
+    public RecyclerView recyclerView;
+
 
     public ArrayList<LeagueTable> arrayList;
     public ArrayList<String> matches ;
     public ArrayList<String> secondMatches;
     public ArrayList<String> scoresFirst;
+    public List<Team> teamList;
+    public static int counter = 0;
+    public static int counterTwo = 0;
+
 
 
 
@@ -72,7 +82,9 @@ public class MatchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_match, container, false);
         ButterKnife.bind(this, view);
 
+
         arrayList = new ArrayList<>();
+
 
         ApiClient.createService(getContext()).getLeague().enqueue(new Callback<Leagues>() {
             @Override
@@ -96,7 +108,6 @@ public class MatchFragment extends Fragment {
         });
 
 
-
         return view;
     }
 
@@ -106,18 +117,64 @@ public class MatchFragment extends Fragment {
 
         generateFixture(arrayList.size(), arrayList);
 
-        for (int i = 0; i < matches.size() - 2; i++) {
+
+                if(counter<arrayList.size() - 1) {
+                    matchOne.setText(matches.get(counter));
+                    matchTwo.setText(matches.get(counter + 1));
+                    matchThree.setText(matches.get(counter + 2));
+
+                    resultOne.setText(scoresFirst.get(counter));
+                    resultTwo.setText(scoresFirst.get(counter + 1));
+                    resultThree.setText(scoresFirst.get(counter + 2));
 
 
-                matchOne.setText(matches.get(i));
-                matchTwo.setText(matches.get(i + 1));
-                matchThree.setText(matches.get(i + 2));
+                    counter++;
+                }else if(counterTwo < arrayList.size() - 1){
+                    matchOne.setText(secondMatches.get(counterTwo));
+                    matchTwo.setText(secondMatches.get(counterTwo+1));
+                    matchThree.setText(secondMatches.get(counterTwo + 2));
 
-                resultOne.setText(scoresFirst.get(i));
-                resultTwo.setText(scoresFirst.get(i + 1));
-                resultThree.setText(scoresFirst.get(i + 2));
+                    resultOne.setText(scoresFirst.get(counterTwo));
+                    resultTwo.setText(scoresFirst.get(counterTwo + 1));
+                    resultThree.setText(scoresFirst.get(counterTwo + 2));
 
-        }
+                    counterTwo++;
+                }
+                else {
+                    Toast.makeText(getContext(),"ALL MATCHES PLAYED",Toast.LENGTH_LONG).show();
+                }
+        setUpScoreTableAdapter();
+    }
+    @OnClick(R.id.playNext)
+    public void setPlayNext(){
+
+    }
+
+    void setUpScoreTableAdapter(){
+        Team team = new Team("bjk",3,1,0,0,1);
+        Team team1 = new Team("bjk",3,1,0,0,1);
+        Team team2 = new Team("bjk",3,1,0,0,1);
+        Team team3 = new Team("bjk",3,1,0,0,1);
+        Team team4 = new Team("bjk",3,1,0,0,1);
+        Team team5 = new Team("bjk",3,1,0,0,1);
+        List<Team> teams = new ArrayList<>();
+        teams.add(team);
+        teams.add(team1);
+        teams.add(team2);
+        teams.add(team3);
+        teams.add(team4);
+        teams.add(team5);
+
+
+
+        ScoreTableAdapter settingsAdapter = new ScoreTableAdapter(teams);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(settingsAdapter);
+
+
+
+
+
     }
 
     private void generateFixture(int teamSize, ArrayList<LeagueTable> teamList) {

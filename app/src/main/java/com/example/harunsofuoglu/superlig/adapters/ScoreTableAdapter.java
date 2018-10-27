@@ -2,6 +2,7 @@ package com.example.harunsofuoglu.superlig.adapters;
 
 import android.support.v7.widget.RecyclerView;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,11 +29,25 @@ public class ScoreTableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+
+        return new ScoreTableAdapter.SettingsHolder(LayoutInflater.from(parent.getContext()).
+                inflate(R.layout.score_row, parent, false));
+
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        final SettingsHolder settingsHolder = (ScoreTableAdapter.SettingsHolder) holder;
+        final Team team = teams.get(position);
+        settingsHolder.winCount.setText(String.valueOf(team.getWin()));
+        settingsHolder.drawCount.setText(String.valueOf(team.getDraw()));
+        settingsHolder.looseCount.setText(String.valueOf(team.getLoose()));
+        settingsHolder.playedMatches.setText(String.valueOf(team.getPlayedMatches()));
+        settingsHolder.pointCount.setText(String.valueOf(team.getPoint()));
+        settingsHolder.teamName.setText(team.getName());
+
+
 
     }
 

@@ -88,15 +88,57 @@
         android:text="Play Next Week"
         />
 
-
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/playNext"
+        >
+
+        <TextView
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:text="TEAM NAME"
+            />
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="Match"
+            />
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="Win"
+            />
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="Loose"
+            />
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="Draw"
+            />
+        <TextView
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:text="Point"
+            />
+
+
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/recyclerView"
-        android:layout_below="@+id/playMatches"
-        android:layout_marginTop="15dp">
+        android:layout_marginBottom="24dp">
 
     </android.support.v7.widget.RecyclerView>
 </RelativeLayout>
