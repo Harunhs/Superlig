@@ -27,6 +27,10 @@ public class Team {
         this.draw = draw;
         this.playedMatches = playedMatches;
     }
+    public Team(String name){
+        this.name = name;
+
+    }
 
 
 }
