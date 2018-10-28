@@ -1,48 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#FFFFFF"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="140dp"
-            android:layout_height="60dp"
             android:id="@+id/team_name"
-            />
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:id="@+id/played_matches"
-        />
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:id="@+id/win_count"
-            />
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:id="@+id/loose_count"
-            />
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:id="@+id/draw_count"
-            />
-        <TextView
-            android:layout_width="50dp"
-            android:layout_height="60dp"
-            android:id="@+id/point_count"
-            />
+            android:layout_width="140dp"
+            android:layout_height="60dp" />
 
+        <TextView
+            android:id="@+id/played_matches"
+            android:layout_width="50dp"
+            android:layout_height="60dp" />
+
+        <TextView
+            android:id="@+id/win_count"
+            android:layout_width="50dp"
+            android:layout_height="60dp" />
+
+        <TextView
+            android:id="@+id/loose_count"
+            android:layout_width="50dp"
+            android:layout_height="60dp" />
+
+        <TextView
+            android:id="@+id/draw_count"
+            android:layout_width="50dp"
+            android:layout_height="60dp" />
+
+        <TextView
+            android:id="@+id/point_count"
+            android:layout_width="50dp"
+            android:layout_height="60dp" />
 
 
     </LinearLayout>

@@ -24,7 +24,9 @@ public class ScoreTableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private List<Team> teams;
 
 
-    public ScoreTableAdapter(List<Team> teams){this.teams = teams;}
+    public ScoreTableAdapter(List<Team> teams) {
+        this.teams = teams;
+    }
 
 
     @Override
@@ -48,7 +50,6 @@ public class ScoreTableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         settingsHolder.teamName.setText(team.getName());
 
 
-
     }
 
     @Override
@@ -56,7 +57,7 @@ public class ScoreTableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         return teams.size();
     }
 
-    class SettingsHolder extends RecyclerView.ViewHolder{
+    class SettingsHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.team_name)
         TextView teamName;
@@ -74,12 +75,10 @@ public class ScoreTableAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public SettingsHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
 
         }
     }
-
-
 
 
 }
