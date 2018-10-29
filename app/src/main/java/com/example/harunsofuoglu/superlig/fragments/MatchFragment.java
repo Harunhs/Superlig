@@ -62,20 +62,28 @@ public class MatchFragment extends Fragment {
 
 
     public static ArrayList<LeagueTable> arrayList;
-
     public ArrayList<String> matches;
-    public ArrayList<String> scoresString;
 
     public static List<Team> teamList;
     public static ArrayList<Integer> scoreList;
+    public static List<Team> matchList;
+
+
+
     public static int counter = 0;
     public static int counterTwo = 0;
     public static int counterThree = 0;
     public static int counterFour = 0;
+
     public static int matchCounter = 0;
     public static int matchCounterTwo = 1;
+
     public static int resultCounter = 0;
-    public static int resultCounterTwo = 1;
+    public static int resultCounterTwo = 0;
+    public static int anInt = 0;
+
+
+
 
 
     public static MatchFragment newInstance() {
@@ -100,6 +108,7 @@ public class MatchFragment extends Fragment {
                 for (int i = 0; i < teamSize; i++) {
                     arrayList.add(response.body().getLeagueStage().get(0).getLeagueTable().get(i));
                     baseTeamList();
+
                 }
 
                 generateFixture(arrayList.size(), arrayList);
@@ -126,13 +135,13 @@ public class MatchFragment extends Fragment {
 
             matchFixtures(matchCounter);
             counter++;
-            matchCounter++;
+            matchCounter = matchCounter + 6;
 
         } else if (counter == 5 && counterTwo < arrayList.size() - 1 && counterTwo == counterFour) {
 
             matchFixtures(matchCounterTwo);
             counterTwo++;
-            matchCounterTwo++;
+            matchCounterTwo = matchCounterTwo + 6;
 
         } else if (counterTwo == arrayList.size() - 1) {
 
@@ -145,6 +154,7 @@ public class MatchFragment extends Fragment {
 
         }
         setUpScoreTableAdapter();
+
     }
 
 
@@ -154,12 +164,33 @@ public class MatchFragment extends Fragment {
         matchTwo.setText(matches.get(counter + 2));
         matchThree.setText(matches.get(counter + 4));
 
+
     }
 
-    public void scoreMatches(int counter) {
-        resultOne.setText(scoresString.get(counter));
-        resultTwo.setText(scoresString.get(counter + 2));
-        resultThree.setText(scoresString.get(counter + 4));
+    public void scoreMatches(int counterScores) {
+
+
+
+        String firstMatch = String.valueOf(scoreList.get(counterScores)) + " - " + String.valueOf(scoreList.get(counterScores + 1));
+        String secondMatch = String.valueOf(scoreList.get(counterScores + 2)) + " - " + String.valueOf(scoreList.get(counterScores + 3));
+        String thirdMatch = String.valueOf(scoreList.get(counterScores + 4)) + " - " + String.valueOf(scoreList.get(counterScores + 5));
+
+        resultOne.setText(firstMatch);
+        resultTwo.setText(secondMatch);
+        resultThree.setText(thirdMatch);
+
+
+            for (int i = 0; i < teamList.size(); i++) {
+
+                if(anInt == 30) {
+                    anInt = anInt - 2;
+                }
+                winDrawLoose(teamList.get(i), scoreList.get(anInt), scoreList.get(anInt + 1));
+
+                anInt = anInt + 2;
+            }
+
+
 
     }
 
@@ -170,14 +201,14 @@ public class MatchFragment extends Fragment {
 
             scoreMatches(resultCounter);
             counterThree++;
-            resultCounter++;
+            resultCounter = resultCounter + 6;
         } else if (counterThree == arrayList.size() - 1 && counterFour < arrayList.size() - 1 && counterFour < counterTwo) {
 
             scoreMatches(resultCounterTwo);
             counterFour++;
-            resultCounterTwo++;
+            resultCounterTwo = resultCounterTwo + 6;
 
-        } else if (counterFour == arrayList.size() - 1) {
+        } else if (counterFour == arrayList.size() - 1 && resultCounterTwo == scoreList.size() - 1) {
 
             Toast.makeText(getContext(), "ALL MATCHES PLAYED", Toast.LENGTH_LONG).show();
         } else {
@@ -189,7 +220,7 @@ public class MatchFragment extends Fragment {
 
     void setUpScoreTableAdapter() {
 
-        ScoreTableAdapter settingsAdapter = new ScoreTableAdapter(sortList());
+        ScoreTableAdapter settingsAdapter = new ScoreTableAdapter(sortList(teamList));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(settingsAdapter);
     }
@@ -197,8 +228,8 @@ public class MatchFragment extends Fragment {
     private void generateFixture(int teamSize, ArrayList<LeagueTable> teamListt) {
 
         matches = new ArrayList<>();
-        scoresString = new ArrayList<>();
         scoreList = new ArrayList<>();
+        matchList = new ArrayList<>();
 
 
         int roundCount = teamSize - 1;
@@ -226,11 +257,15 @@ public class MatchFragment extends Fragment {
 
                 String matchDep = list.get(secondIndex).getName() + " - " + list.get(j).getName();
 
-                score(list, scoresString, j, secondIndex);
+                score(list, j, secondIndex);
 
 
                 matches.add(match);
                 matches.add(matchDep);
+                Team a = new Team(list.get(j).getName(), 0, 0, 0, 0, 0);
+                Team b = new Team(list.get(secondIndex).getName(), 0, 0, 0, 0, 0);
+                matchList.add(a);
+                matchList.add(b);
 
 
             }
@@ -256,7 +291,7 @@ public class MatchFragment extends Fragment {
 
     }
 
-    public static void score(List<LeagueTable> leagueTable, ArrayList<String> scores, int i, int j) {
+    public static void score(List<LeagueTable> leagueTable, int i, int j) {
         int homeScore;
         int depScore;
 
@@ -269,8 +304,7 @@ public class MatchFragment extends Fragment {
             homeScore = random.nextInt(3);
             depScore = random.nextInt(6);
         }
-        scores.add(String.valueOf(homeScore) + " - " + String.valueOf(depScore));
-        scores.add(String.valueOf(depScore) + " - " + String.valueOf(homeScore));
+
         scoreList.add(homeScore);
         scoreList.add(depScore);
     }
@@ -288,50 +322,67 @@ public class MatchFragment extends Fragment {
         return teamList;
     }
 
+
     public static void winDrawLoose(Team team, int scoreOne, int scoreTwo) {
 
 
         if (scoreOne > scoreTwo) {
             team.setPoint(team.getPoint() + 3);
             team.setWin(team.getWin() + 1);
+            team.setLoose(team.getLoose());
+            team.setDraw(team.getDraw());
 
         } else if (scoreOne == scoreTwo) {
+
             team.setPoint(team.getPoint() + 1);
             team.setDraw(team.getDraw() + 1);
+            team.setWin(team.getWin());
+            team.setLoose(team.getLoose());
+
         } else if (scoreOne < scoreTwo) {
             team.setLoose(team.getLoose() + 1);
+            team.setPoint(team.getPoint());
+            team.setWin(team.getWin());
+            team.setDraw(team.getDraw());
 
         }
         team.setPlayedMatches(team.getPlayedMatches() + 1);
+        for (int i = 0;i<teamList.size();i++){
+            if(teamList.get(i).getName().equals(team.getName())){
+                teamList.set(i,team);
+            }
+        }
+
+
 
     }
 
 
-    public static List<Team> sortList() {
+    public static List<Team> sortList(List<Team> list) {
 
-        for (int i = 0; i < teamList.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
 
-            int frst = teamList.get(i).getPoint();
+            int frst = list.get(i).getPoint();
             int temp = i;
 
-            for (int j = i + 1; j < teamList.size(); j++) {
-                if (teamList.get(j).getPoint() > frst) {
+            for (int j = i + 1; j < list.size(); j++) {
+                if (list.get(j).getPoint() > frst) {
 
-                    frst = teamList.get(j).getPoint();
+                    frst = list.get(j).getPoint();
                     temp = j;
                 }
             }
 
             if (temp != i) {
 
-                teamList.get(temp).setPoint(teamList.get(i).getPoint());
-                teamList.get(i).setPoint(frst);
+                list.get(temp).setPoint(list.get(i).getPoint());
+                list.get(i).setPoint(frst);
 
             }
 
         }
 
-        return teamList;
+        return list;
     }
 
 }
